@@ -1,0 +1,3 @@
+creation_rules:
+  - path: terraform.tfstate
+    age: age122rzu0gtuzk2lleqj2dn265g3suqgdga70jvfycjwlwv0820xqns0qkxw3

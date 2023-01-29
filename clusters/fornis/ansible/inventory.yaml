@@ -1,0 +1,45 @@
+all:
+  hosts:
+    fornis:
+      tfstate: "{{ lookup('ansible.builtin.file', '../terraform/terraform.tfstate') | from_json }}"
+      ipv6: "{{ tfstate.outputs.ipv6.value }}"
+      public_ipv4: "{{ tfstate.outputs.ipv4.value }}"
+      private_ipv4: "{{ tfstate.outputs.private_ipv4.value }}"
+
+      data_disk: /dev/sdb
+
+      ansible_user: ubuntu
+      ansible_host: "{{ ipv6 }}"
+
+      k3s_version: v1.26.1+k3s1
+
+      k3s_config_control_plane:
+        # Use etcd and store snapshot to additional disk
+        cluster-init: true
+        etcd-snapshot-dir: /mnt/data/etcd-snapshots
+        # Must be know for backup restoration
+        token: "{{ k3s_token }}"
+
+        node-name: fornis
+        node-external-ip: "{{ ipv6 }},{{ public_ipv4 }}"
+        node-ip: "{{ ipv6 }},{{ private_ipv4 }}"
+        advertise-address: "{{ ipv6 }}"
+        tls-san:
+          - "{{ ipv6 }}"
+          - 2a0c:b641:2bf:1::1 # Fix apiserver certificat not signed for ClusterIP type IPv6
+
+        # Disable k3s default
+        disable: traefik,local-storage,servicelb
+        disable-helm-controller: true
+
+        # DO NOT USE. 2a0c:b641:2bf::/48 allocated to AS212625 and not annonced
+        # Used to fix RFC6724 IPv4 prefered over ULA.
+        cluster-cidr: 2a0c:b641:2bf::/64,10.42.0.0/16
+        service-cidr: 2a0c:b641:2bf:1::/108,10.43.0.0/16
+        cluster-dns: 2a0c:b641:2bf:1::53
+
+        # Oracle does not allow routing subnet to instance.
+        # NAT66 is better than no IPv6, even if still awful
+        flannel-ipv6-masq: true
+        kube-proxy-arg:
+          - proxy-mode=ipvs
