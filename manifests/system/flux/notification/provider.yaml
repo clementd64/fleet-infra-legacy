@@ -1,0 +1,36 @@
+---
+apiVersion: notification.toolkit.fluxcd.io/v1beta2
+kind: Provider
+metadata:
+  name: slack
+  namespace: flux-system
+spec:
+  type: discord
+  address: https://slack.com/api/chat.postMessage
+  secretRef:
+    name: discord-webhook
+---
+apiVersion: notification.toolkit.fluxcd.io/v1beta2
+kind: Alert
+metadata:
+  name: discord
+  namespace: flux-system
+spec:
+  providerRef:
+    name: slack
+  eventSeverity: error
+  eventSources:
+    - kind: Bucket
+      name: '*'
+    - kind: GitRepository
+      name: '*'
+    - kind: HelmChart
+      name: '*'
+    - kind: HelmRelease
+      name: '*'
+    - kind: HelmRepository
+      name: '*'
+    - kind: OCIRepository
+      name: '*'
+    - kind: Kustomization
+      name: '*'

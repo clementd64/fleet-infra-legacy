@@ -5,3 +5,4 @@ resources:
 - ../../manifests/system/flux
 - manifests/flux/fleet-infra.yaml
 - manifests/flux/fleet-infra.secret.yaml
+- ../../manifests/system/flux/notification
