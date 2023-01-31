@@ -1,0 +1,31 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: GitRepository
+metadata:
+    name: fleet-infra
+    namespace: flux-system
+spec:
+    interval: 15m
+    ref:
+        branch: main
+    secretRef:
+        name: github-fleet-infra
+    url: ssh://git@github.com/clementd64/fleet-infra.git
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+    name: fleet-infra
+    namespace: flux-system
+spec:
+    serviceAccountName: kustomize-controller
+    interval: 15m
+    path: ./clusters/fornis
+    prune: true
+    sourceRef:
+        kind: GitRepository
+        name: fleet-infra
+    decryption:
+        provider: sops
+        secretRef:
+            name: fleet-infra-sops-age
