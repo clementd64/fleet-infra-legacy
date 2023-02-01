@@ -6,3 +6,6 @@ resources:
 - manifests/flux/fleet-infra.yaml
 - manifests/flux/fleet-infra.secret.yaml
 - ../../manifests/system/flux/notification
+
+# OpenEBS
+- ../../manifests/storage/openebs-localpv
