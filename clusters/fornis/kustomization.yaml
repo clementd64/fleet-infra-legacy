@@ -9,9 +9,10 @@ resources:
 
 # OpenEBS
 - ../../manifests/storage/openebs-localpv
-
 # Ingress Nginx
 - ../../manifests/ingress/nginx
+# cert-manager
+- ../../manifests/security/cert-manager
 
 # Ingress use host port.
 # Fine because single node cluster
