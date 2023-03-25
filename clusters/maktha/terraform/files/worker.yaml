@@ -1,0 +1,5 @@
+machine:
+  kubelet:
+    clusterDNS:
+      - fd74:8b9c:7d73:cf2e::a
+      - 10.96.0.10

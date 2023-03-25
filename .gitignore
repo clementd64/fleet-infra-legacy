@@ -1,6 +1,7 @@
 kubeconfig.yaml
 keys.txt
 *.pem
+talosconfig
 
 # Local .terraform directories
 **/.terraform/*

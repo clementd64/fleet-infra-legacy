@@ -1,0 +1,19 @@
+cluster:
+  inlineManifests:
+    - name: "calico-ipv6-${name}"
+      contents: |
+        apiVersion: crd.projectcalico.org/v1
+        kind: IPPool
+        metadata:
+          name: "${name}-ipv6"
+        spec:
+          cidr: "${cidr}"
+          blockSize: 122
+          ipipMode: Never
+          vxlanMode: Never
+          natOutgoing: false
+          disabled: false
+          nodeSelector: 'kubernetes.io/hostname == "${name}"'
+          allowedUses:
+            - Workload
+            - Tunnel

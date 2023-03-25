@@ -1,0 +1,12 @@
+machine:
+  kubelet:
+    extraMounts:
+      - destination: /var/lib/calico
+        type: bind
+        source: /var/lib/calico
+        options:
+          - bind
+          - ro
+  sysctls:
+    net.ipv6.conf.all.forwarding: "1"
+    net.ipv4.ip_forward: "1"

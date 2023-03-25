@@ -1,0 +1,54 @@
+machine:
+  network:
+    interfaces:
+    - interface: eth0
+      vip:
+        ip: "${hcloud_vip}"
+        hcloud:
+          apiToken: ${hcloud_apikey}
+
+cluster:
+  controllerManager:
+    extraArgs:
+      allocate-node-cidrs: false
+  network:
+    cni:
+      name: custom
+      urls:
+        - https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/tigera-operator.yaml
+    serviceSubnets:
+      - fd74:8b9c:7d73:cf2e::/108
+      - 10.96.0.0/12
+  proxy:
+    mode: ipvs
+  allowSchedulingOnControlPlanes: true
+  apiServer:
+    admissionControl:
+      - name: PodSecurity
+        configuration:
+          apiVersion: pod-security.admission.config.k8s.io/v1alpha1
+          kind: PodSecurityConfiguration
+          exemptions:
+            namespaces:
+              - tigera-operator
+              - calico-system
+  inlineManifests:
+    - name: calico-installation
+      contents: |
+        apiVersion: operator.tigera.io/v1
+        kind: Installation
+        metadata:
+          name: default
+        spec:
+          kubeletVolumePluginPath: None
+          calicoNetwork:
+            ipPools:
+            - cidr: fd01::/64
+              encapsulation: None
+              natOutgoing: Disabled
+              nodeSelector: !all()
+            - blockSize: 25 # =128 ip. max Pod is 110
+              cidr: 10.244.0.0/16
+              encapsulation: VXLANCrossSubnet
+              natOutgoing: Enabled
+              nodeSelector: all()
