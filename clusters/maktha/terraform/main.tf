@@ -49,10 +49,6 @@ resource "talos_machine_bootstrap" "bootstrap" {
   endpoint     = local.first_controlplane_ip
   node         = local.first_controlplane_ip
 
-  depends_on = [
-    talos_machine_configuration_apply.config_apply
-  ]
-
   lifecycle {
     ignore_changes = [
       node,

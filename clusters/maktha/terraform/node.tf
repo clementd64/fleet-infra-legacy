@@ -78,7 +78,7 @@ resource "talos_machine_configuration_controlplane" "machineconfig" {
     }),
     [for k, v in local.nodes : templatefile("${path.module}/files/ippool.yaml", {
       name : k,
-      ipv6Cidr : cidrsubnet("${hcloud_primary_ip.ipv6[k].ip_address}/64", 58, 1), # 122 - 64 = 58
+      ipv6Cidr : cidrsubnet("${hcloud_primary_ip.ipv6[k].ip_address}/64", 52, 1), # 116 - 64 = 52
       ipv4Cidr : cidrsubnet("10.244.0.0/16", 8, v.id)
     })]
   ])

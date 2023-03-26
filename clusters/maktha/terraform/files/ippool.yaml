@@ -8,7 +8,7 @@ cluster:
           name: "${name}-ipv6"
         spec:
           cidr: "${ipv6Cidr}"
-          blockSize: 122
+          blockSize: 116
           ipipMode: Never
           vxlanMode: Never
           natOutgoing: false
