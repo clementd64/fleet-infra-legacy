@@ -2,7 +2,7 @@
 apiVersion: notification.toolkit.fluxcd.io/v1beta2
 kind: Provider
 metadata:
-  name: slack
+  name: discord
   namespace: flux-system
 spec:
   type: discord
@@ -17,7 +17,7 @@ metadata:
   namespace: flux-system
 spec:
   providerRef:
-    name: slack
+    name: discord
   eventSeverity: info
   eventSources:
     - kind: Bucket
