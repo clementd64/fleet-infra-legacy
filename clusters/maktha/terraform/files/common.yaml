@@ -1,5 +1,7 @@
 machine:
   kubelet:
+    extraArgs:
+      rotate-server-certificates: true
     extraMounts:
       - destination: /var/lib/calico
         type: bind
