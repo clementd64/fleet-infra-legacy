@@ -1,9 +1,12 @@
 locals {
   nodes = merge([
     for pool, spec in local.pools : {
-      for suffix in spec.suffixes : "${pool}-${suffix}" => merge(
+      for id in spec.ids : "${pool}-${id}" => merge(
         spec.spec,
-        { "placement_group" : pool }
+        {
+          "id" : id
+          "placement_group" : pool
+        }
       )
     }
   ]...)
@@ -75,7 +78,8 @@ resource "talos_machine_configuration_controlplane" "machineconfig" {
     }),
     [for k, v in local.nodes : templatefile("${path.module}/files/ippool.yaml", {
       name : k,
-      cidr : cidrsubnet("${hcloud_primary_ip.ipv6[k].ip_address}/64", 58, 1), # 122 - 64 = 58
+      ipv6Cidr : cidrsubnet("${hcloud_primary_ip.ipv6[k].ip_address}/64", 58, 1), # 122 - 64 = 58
+      ipv4Cidr : cidrsubnet("10.244.0.0/16", 8, v.id)
     })]
   ])
 }

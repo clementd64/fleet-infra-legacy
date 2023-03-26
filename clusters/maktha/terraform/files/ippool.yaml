@@ -7,11 +7,28 @@ cluster:
         metadata:
           name: "${name}-ipv6"
         spec:
-          cidr: "${cidr}"
+          cidr: "${ipv6Cidr}"
           blockSize: 122
           ipipMode: Never
           vxlanMode: Never
           natOutgoing: false
+          disabled: false
+          nodeSelector: 'kubernetes.io/hostname == "${name}"'
+          allowedUses:
+            - Workload
+            - Tunnel
+    - name: "calico-ipv4-${name}"
+      contents: |
+        apiVersion: crd.projectcalico.org/v1
+        kind: IPPool
+        metadata:
+          name: "${name}-ipv4"
+        spec:
+          cidr: "${ipv4Cidr}"
+          blockSize: 24
+          ipipMode: Never
+          vxlanMode: Never
+          natOutgoing: true
           disabled: false
           nodeSelector: 'kubernetes.io/hostname == "${name}"'
           allowedUses:

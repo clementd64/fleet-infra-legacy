@@ -4,16 +4,16 @@ locals {
 
   pools = {
     #"pool_name" = {
-    #  "suffixes" = [] # id appended to the pool name, allowing stable name and removal of nodes
+    #  "ids" = [] # id of the node. Must be between 1 and 254 and unique across all pools
     #  "spec" = {
     #    "instance_type" = ""
     #  }
     #}
     "control-plane" = {
-      "suffixes" = [
-        "aj2t4",
-        "ggh3n",
-        "s7qyt",
+      "ids" = [
+        73,
+        149,
+        154,
       ]
       "spec" = {
         "instance_type"   = "cx21"

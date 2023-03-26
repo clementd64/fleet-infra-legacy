@@ -42,13 +42,15 @@ cluster:
         spec:
           kubeletVolumePluginPath: None
           calicoNetwork:
+            mtu: 1450 # Hetzner private network use 1450 MTU. Shame on you.
             ipPools:
+            # Pool configured manually per node, set here only for family being enabled.
             - cidr: fd01::/64
               encapsulation: None
               natOutgoing: Disabled
               nodeSelector: !all()
             - blockSize: 25 # =128 ip. max Pod is 110
               cidr: 10.244.0.0/16
-              encapsulation: VXLANCrossSubnet
-              natOutgoing: Enabled
-              nodeSelector: all()
+              encapsulation: None
+              natOutgoing: Disabled
+              nodeSelector: !all()
