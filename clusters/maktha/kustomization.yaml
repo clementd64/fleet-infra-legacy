@@ -6,3 +6,7 @@ resources:
 - manifests/flux/fleet-infra.yaml
 - manifests/flux/fleet-infra.secret.yaml
 - ../../manifests/cd/flux/notification
+
+# hcloud
+- manifests/hcloud-token.secret.yaml
+- ../../manifests/storage/csi-driver-hcloud
