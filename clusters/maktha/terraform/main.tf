@@ -15,7 +15,11 @@ variable "sshkey" {
   type = string
 }
 
-variable "snapshot_id" {
+variable "image_amd64_id" {
+  type = number
+}
+
+variable "image_arm64_id" {
   type = number
 }
 

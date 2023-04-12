@@ -50,7 +50,7 @@ resource "hcloud_primary_ip" "ipv4" {
 resource "hcloud_server" "node" {
   for_each           = local.nodes
   name               = each.key
-  image              = var.snapshot_id
+  image              = each.value.image_id
   server_type        = each.value.instance_type
   datacenter         = local.datacenter
   placement_group_id = hcloud_placement_group.placement_group[each.value.placement_group].id
@@ -62,6 +62,12 @@ resource "hcloud_server" "node" {
   public_net {
     ipv6 = hcloud_primary_ip.ipv6[each.key].id
     ipv4 = hcloud_primary_ip.ipv4[each.key].id
+  }
+
+  lifecycle {
+    ignore_changes = [
+      image,
+    ]
   }
 }
 
