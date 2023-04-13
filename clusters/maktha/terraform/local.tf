@@ -11,15 +11,15 @@ locals {
     #    "is_controlplane" = false
     #  }
     #}
-    "control-plane" = {
+    "control-plane1" = {
       "ids" = [
-        73,
-        149,
-        154,
+        41,
+        171,
+        220,
       ]
       "spec" = {
-        "instance_type"   = "cx21"
-        "image_id"        = var.image_amd64_id
+        "instance_type"   = "cax11"
+        "image_id"        = var.image_arm64_id
         "is_controlplane" = true
       }
     }
