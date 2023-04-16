@@ -13,3 +13,29 @@ resources:
 
 # Monitoring
 - ../../manifests/monitoring/metrics-server
+
+# Ingress
+- ../../manifests/ingress/nginx
+
+patches:
+- patch: |-
+    apiVersion: helm.toolkit.fluxcd.io/v2beta1
+    kind: HelmRelease
+    metadata:
+      name: ingress-nginx
+      namespace: flux-system
+    spec:
+      values:
+        controller:
+          config:
+            enable-brotli: "true"
+            proxy-real-ip-cidr: "10.244.0.0/24"
+            use-gzip: "true"
+            use-proxy-protocol: "true"
+          service:
+            ipFamilyPolicy: PreferDualStack
+            ipFamilies: [ IPv6, IPv4 ]
+            type: NodePort
+            nodePorts:
+              http: 32080
+              https: 32443

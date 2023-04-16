@@ -4,11 +4,11 @@ locals {
 
   pools = {
     #"pool_name" = {
-    #  "ids" = [] # id of the node. Must be between 1 and 254 and unique across all pools
+    #  "ids" = [] # id of the node. Must be between 1 and 253 and unique across all pools
     #  "spec" = {
     #    "instance_type" = ""
-    #    "image_id" = 0
     #    "is_controlplane" = false
+    #    "load_balancer_endpoint" = false # is pool used as load balancer endpoint
     #  }
     #}
     "control-plane1" = {
@@ -18,9 +18,9 @@ locals {
         220,
       ]
       "spec" = {
-        "instance_type"   = "cax11"
-        "image_id"        = var.image_arm64_id
-        "is_controlplane" = true
+        "instance_type"          = "cax11"
+        "is_controlplane"        = true
+        "load_balancer_endpoint" = true
       }
     }
   }

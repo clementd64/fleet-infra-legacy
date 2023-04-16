@@ -21,12 +21,22 @@ resource "hcloud_floating_ip" "endpoint" {
   type          = "ipv6"
   name          = "${local.cluster_name}-endpoint"
   home_location = split("-", local.datacenter)[0]
+
+  labels = {
+    "managed-by" = "terraform"
+    "cluster"    = local.cluster_name
+  }
 }
 
 resource "hcloud_placement_group" "placement_group" {
   for_each = local.pools
   name     = each.key
   type     = "spread"
+
+  labels = {
+    "managed-by" = "terraform"
+    "cluster"    = local.cluster_name
+  }
 }
 
 resource "hcloud_primary_ip" "ipv6" {
@@ -36,6 +46,11 @@ resource "hcloud_primary_ip" "ipv6" {
   type          = "ipv6"
   assignee_type = "server"
   auto_delete   = false
+
+  labels = {
+    "managed-by" = "terraform"
+    "cluster"    = local.cluster_name
+  }
 }
 
 resource "hcloud_primary_ip" "ipv4" {
@@ -45,12 +60,22 @@ resource "hcloud_primary_ip" "ipv4" {
   type          = "ipv4"
   assignee_type = "server"
   auto_delete   = false
+
+  labels = {
+    "managed-by" = "terraform"
+    "cluster"    = local.cluster_name
+  }
+}
+
+data "hcloud_server_type" "instance_type" {
+  for_each = local.nodes
+  name     = each.value.instance_type
 }
 
 resource "hcloud_server" "node" {
   for_each           = local.nodes
   name               = each.key
-  image              = each.value.image_id
+  image              = data.hcloud_server_type.instance_type[each.key].architecture == "arm" ? var.image_arm64_id : var.image_amd64_id
   server_type        = each.value.instance_type
   datacenter         = local.datacenter
   placement_group_id = hcloud_placement_group.placement_group[each.value.placement_group].id
@@ -62,6 +87,11 @@ resource "hcloud_server" "node" {
   public_net {
     ipv6 = hcloud_primary_ip.ipv6[each.key].id
     ipv4 = hcloud_primary_ip.ipv4[each.key].id
+  }
+
+  labels = {
+    "managed-by" = "terraform"
+    "cluster"    = local.cluster_name
   }
 
   lifecycle {
@@ -104,7 +134,7 @@ resource "talos_machine_configuration_apply" "config_apply" {
   for_each     = local.nodes
   talos_config = talos_client_configuration.talosconfig.talos_config
 
-  machine_configuration = each.value.is_controlplane ? talos_machine_configuration_controlplane.machineconfig.machine_config : talos_machine_configuration_worker.machineconfig.machine_config
+  machine_configuration = lookup(each.value, "is_controlplane", false) ? talos_machine_configuration_controlplane.machineconfig.machine_config : talos_machine_configuration_worker.machineconfig.machine_config
 
   endpoint = "${hcloud_primary_ip.ipv6[each.key].ip_address}1"
   node     = "${hcloud_primary_ip.ipv6[each.key].ip_address}1"
