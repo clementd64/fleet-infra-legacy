@@ -11,14 +11,14 @@ locals {
     #    "load_balancer_endpoint" = false # is pool used as load balancer endpoint
     #  }
     #}
-    "control-plane1" = {
+    "control-plane-fb7n7" = {
       "ids" = [
-        41,
-        171,
-        220,
+        71,
+        132,
+        158,
       ]
       "spec" = {
-        "instance_type"          = "cax11"
+        "instance_type"          = "cx21"
         "is_controlplane"        = true
         "load_balancer_endpoint" = true
       }
