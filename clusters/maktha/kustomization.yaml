@@ -9,6 +9,7 @@ resources:
 
 # Security
 - ../../manifests/security/network-policies
+- ../../manifests/security/cert-manager
 
 # hcloud
 - manifests/hcloud-token.secret.yaml

@@ -5,7 +5,7 @@ metadata:
   name: acme-http01-letsencrypt-prod
 spec:
   acme:
-    email: hello@clementd.fr
+    email: clement@dubreuil.dev
     server: https://acme-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
       name: letsencrypt-prod-account-key
@@ -20,7 +20,7 @@ metadata:
   name: acme-http01-letsencrypt-staging
 spec:
   acme:
-    email: hello@clementd.fr
+    email: clement@dubreuil.dev
     server: https://acme-staging-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
       name: letsencrypt-staging-account-key
