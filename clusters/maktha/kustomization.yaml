@@ -20,6 +20,7 @@ resources:
 
 # Ingress
 - ../../manifests/ingress/nginx
+- manifests/ingress-networkpolicy.yaml
 
 patches:
 - patch: |-
@@ -33,10 +34,11 @@ patches:
         controller:
           config:
             enable-brotli: "true"
-            proxy-real-ip-cidr: "10.244.0.0/24"
+            proxy-real-ip-cidr: "10.244.0.254/32"
             use-gzip: "true"
             use-proxy-protocol: "true"
           service:
+            externalTrafficPolicy: Local
             ipFamilyPolicy: PreferDualStack
             ipFamilies: [ IPv6, IPv4 ]
             type: NodePort

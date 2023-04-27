@@ -1,0 +1,18 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-from-loadbalancer
+  namespace: ingress-nginx
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - ipBlock:
+            cidr: 10.244.0.254/32
+      ports:
+        # Use port after DNAT from NodePort
+        - port: 80
+        - port: 443
