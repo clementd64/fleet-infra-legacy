@@ -3,7 +3,7 @@ resource "talos_machine_secrets" "secrets" {}
 data "talos_client_configuration" "talosconfig" {
   cluster_name         = var.cluster_name
   client_configuration = talos_machine_secrets.secrets.client_configuration
-  endpoints            = [for n in var.nodes : cidrhost(hcloud_primary_ip.ipv6[n.id].ip_network, 1)]
+  endpoints            = [for k, v in local.nodesets_ip : v.ipv6_address]
 }
 
 data "talos_machine_configuration" "node" {
@@ -111,13 +111,13 @@ data "talos_machine_configuration" "node" {
 }
 
 resource "talos_machine_configuration_apply" "config_apply" {
-  for_each = local.nodesets
+  for_each = local.nodesets_ip
 
   client_configuration        = data.talos_client_configuration.talosconfig.client_configuration
   machine_configuration_input = data.talos_machine_configuration.node[each.key].machine_configuration
 
-  endpoint = cidrhost(hcloud_primary_ip.ipv6[each.key].ip_network, 1)
-  node     = cidrhost(hcloud_primary_ip.ipv6[each.key].ip_network, 1)
+  endpoint = each.value.ipv6_address
+  node     = each.value.ipv6_address
 
   depends_on = [
     hcloud_server.node,
@@ -127,8 +127,7 @@ resource "talos_machine_configuration_apply" "config_apply" {
 # Floating ip assigned after bootstrapping
 # Use the first controlplane for bootstrapping
 locals {
-  first_controlplane    = [for n in var.nodes : n if n.controlplane][0]
-  first_controlplane_ip = cidrhost(hcloud_primary_ip.ipv6[local.first_controlplane.id].ip_network, 1)
+  first_controlplane_ip = [for k, v in local.nodesets_ip : v.ipv6_address if v.controlplane][0]
 }
 resource "talos_machine_bootstrap" "bootstrap" {
   client_configuration = data.talos_client_configuration.talosconfig.client_configuration
@@ -145,7 +144,7 @@ resource "talos_machine_bootstrap" "bootstrap" {
 
 # Patch node resouces with assigned PodCIDRs
 resource "null_resource" "node_pod_cidr" {
-  for_each = local.nodesets
+  for_each = local.nodesets_ip
 
   provisioner "local-exec" {
     command     = <<-EOT
@@ -160,8 +159,8 @@ resource "null_resource" "node_pod_cidr" {
       PATCH = jsonencode({
         spec = {
           podCIDRs = [
-            cidrsubnet(hcloud_primary_ip.ipv6[each.key].ip_network, 52, 1), # 116 - 64 = 52
-            cidrsubnet(var.pods_subnet_ipv4, 8, each.value.id),
+            each.value.ipv6_pod_cidr,
+            each.value.ipv4_pod_cidr,
           ]
         }
       })

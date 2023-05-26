@@ -15,20 +15,20 @@ resource "hcloud_network_subnet" "node_subnet" {
   network_id   = hcloud_network.network.id
   type         = "cloud"
   network_zone = data.hcloud_location.location.network_zone
-  ip_range     = cidrsubnet(hcloud_network.network.ip_range, 8, 0)
+  ip_range     = local.nodes_private_ipv4_subnet
 }
 
 resource "hcloud_network_route" "pod_subnet" {
-  for_each = local.nodesets
+  for_each = local.nodesets_ip
 
   network_id  = hcloud_network.network.id
-  destination = cidrsubnet(hcloud_network.network.ip_range, 8, each.value.id)
-  gateway     = cidrhost(hcloud_network_subnet.node_subnet.ip_range, each.value.id)
+  destination = each.value.ipv4_pod_cidr
+  gateway     = each.value.ipv4_private_address
 }
 
 resource "hcloud_server_network" "network" {
-  for_each   = local.nodesets
+  for_each   = local.nodesets_ip
   server_id  = hcloud_server.node[each.key].id
   network_id = hcloud_network.network.id
-  ip         = cidrhost(hcloud_network_subnet.node_subnet.ip_range, each.value.id)
+  ip         = each.value.ipv4_private_address
 }

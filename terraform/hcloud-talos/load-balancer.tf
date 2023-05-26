@@ -21,7 +21,7 @@ resource "hcloud_load_balancer_network" "network" {
 
   load_balancer_id = hcloud_load_balancer.load_balancer[0].id
   network_id       = hcloud_network.network.id
-  ip               = cidrhost(hcloud_network.network.ip_range, 254)
+  ip               = cidrhost(local.nodes_private_ipv4_subnet, 254)
 }
 
 resource "hcloud_load_balancer_service" "http" {

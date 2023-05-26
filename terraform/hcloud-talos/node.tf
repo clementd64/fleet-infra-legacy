@@ -75,12 +75,12 @@ resource "hcloud_server" "node" {
 }
 
 resource "cloudflare_record" "node_ipv6" {
-  for_each = local.nodesets
+  for_each = local.nodesets_ip
 
   zone_id = data.cloudflare_zone.zone.id
   name    = "nodes.${var.cluster_name}.k8s"
   type    = "AAAA"
-  value   = cidrhost(hcloud_primary_ip.ipv6[each.key].ip_network, 1)
+  value   = each.value.ipv6_address
   proxied = false
 }
 

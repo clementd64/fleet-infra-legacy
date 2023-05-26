@@ -31,13 +31,13 @@ resource "cloudflare_record" "api_ipv6_nodes" {
   for_each = (
     var.api_floating_ipv6
     ? {}
-    : { for k, v in local.nodesets : k => v if v.controlplane }
+    : { for k, v in local.nodesets_ip : k => v if v.controlplane }
   )
 
   zone_id = data.cloudflare_zone.zone.id
   name    = "api.${var.cluster_name}.k8s"
   type    = "AAAA"
-  value   = cidrhost(hcloud_primary_ip.ipv6[each.key].ip_network, 1)
+  value   = each.value.ipv6_address
   proxied = false
 }
 
