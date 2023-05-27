@@ -124,6 +124,18 @@ variable "load_balancer_type" {
   default     = "lb11"
 }
 
+variable "load_balancer_target_http_port" {
+  description = "Load balancer target's HTTP port"
+  type        = number
+  default     = 32080
+}
+
+variable "load_balancer_target_https_port" {
+  description = "Load balancer target's HTTPS port"
+  type        = number
+  default     = 32443
+}
+
 variable "cilium_version" {
   description = "Cilium version to install"
   type        = string

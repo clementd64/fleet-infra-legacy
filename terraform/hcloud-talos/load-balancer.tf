@@ -30,7 +30,7 @@ resource "hcloud_load_balancer_service" "http" {
   load_balancer_id = hcloud_load_balancer.load_balancer[0].id
   protocol         = "tcp"
   listen_port      = 80
-  destination_port = 32080
+  destination_port = var.load_balancer_target_http_port
   proxyprotocol    = true
 }
 
@@ -40,7 +40,7 @@ resource "hcloud_load_balancer_service" "https" {
   load_balancer_id = hcloud_load_balancer.load_balancer[0].id
   protocol         = "tcp"
   listen_port      = 443
-  destination_port = 32443
+  destination_port = var.load_balancer_target_https_port
   proxyprotocol    = true
 }
 

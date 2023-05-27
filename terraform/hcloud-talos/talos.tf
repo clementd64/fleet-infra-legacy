@@ -37,6 +37,10 @@ data "talos_machine_configuration" "node" {
             }]
           }
         }
+
+        nodeLabels = each.value.load_balancer_target == null ? null : {
+          "hcloud.oci.sh/load-balancer-target" = ""
+        }
       }
     },
     # Set cluster DNS on worker node
