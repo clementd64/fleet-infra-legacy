@@ -32,7 +32,7 @@ terraform {
 }
 
 locals {
-  # Domain name hardcoded since gandi provider is hardcoded
+  # Domain name hardcoded since cloudflare provider is hardcoded
   domain_name               = "oci.sh"
   nodes_private_ipv4_subnet = cidrsubnet(var.pods_subnet_ipv4, 8, 0)
 
