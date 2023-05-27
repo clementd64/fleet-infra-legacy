@@ -15,11 +15,30 @@ data "talos_machine_configuration" "node" {
   machine_type       = each.value.controlplane ? "controlplane" : "worker"
   kubernetes_version = var.kubernetes_version
 
-  # TODO: disk encryption
-
   config_patches = [for c in flatten([
-    # Sign API cert with k8s api domain
-    { machine = { certSANs = [local.kube_endpoint_domain] } },
+    {
+      machine = {
+        # Sign API cert with k8s api domain
+        certSANs = [local.kube_endpoint_domain]
+
+        systemDiskEncryption = {
+          ephemeral = {
+            provider = "luks2"
+            keys = [{
+              nodeID = {}
+              slot   = 0
+            }]
+          }
+          state = {
+            provider = "luks2"
+            keys = [{
+              nodeID = {}
+              slot   = 0
+            }]
+          }
+        }
+      }
+    },
     # Set cluster DNS on worker node
     each.value.controlplane ? null : {
       machine = {

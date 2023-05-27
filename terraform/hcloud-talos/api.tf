@@ -9,6 +9,13 @@ resource "hcloud_floating_ip" "api" {
     "managed-by" = "terraform"
     "cluster"    = var.cluster_name
   }
+
+  lifecycle {
+    precondition {
+      condition     = !var.api_floating_ipv6 || var.api_floating_ip_api_token != null
+      error_message = "API token must be provided when using floating ip for API endpoint"
+    }
+  }
 }
 
 locals {

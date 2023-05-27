@@ -57,6 +57,13 @@ resource "hcloud_load_balancer_target" "node" {
     hcloud_load_balancer_network.network,
     hcloud_server_network.network,
   ]
+
+  lifecycle {
+    precondition {
+      condition     = var.load_balancer
+      error_message = "You must enabled load balancer to define node as target"
+    }
+  }
 }
 
 resource "cloudflare_record" "lb_ipv6" {
