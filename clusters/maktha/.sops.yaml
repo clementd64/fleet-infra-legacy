@@ -1,3 +1,7 @@
 creation_rules:
-  - path: terraform.tfstate
+  - path_regex: "\\.secret\\.yaml$"
+    encrypted_regex: "^(data|stringData)$"
+    age: age1657w8lr7qkg8k22ya95avm88nf849dx6kc8w2gdaup7vz7ljv3ysmn0px7
+
+  - path_regex: "terraform\\.tfstate$"
     age: age19g5uyltuwm0gjwfszg6s5d233h6ka7dd9x5vdpkseyvueekuvflsmrs28v

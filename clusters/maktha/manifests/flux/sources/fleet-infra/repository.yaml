@@ -1,0 +1,13 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+    name: fleet-infra
+    namespace: flux-system
+spec:
+    interval: 15m
+    ref:
+        branch: main
+    secretRef:
+        name: flux-git-fleet-infra
+    url: ssh://git@github.com/clementd64/fleet-infra.git
