@@ -127,9 +127,7 @@ variable "load_balancer_type" {
 variable "cilium_version" {
   description = "Cilium version to install"
   type        = string
-  # IPv6 built-in kernel module not reconized.
-  # Fixed in 1.14 and 1.13.3, waiting for release
-  default = "v1.14.0-snapshot.2"
+  default     = "v1.13.3"
 }
 
 variable "cilium_namespace" {
