@@ -1,0 +1,14 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: fleet-infra-flux-notification
+  namespace: flux-system
+spec:
+  serviceAccountName: kustomize-controller
+  interval: 15m
+  path: ./clusters/maktha/manifests/flux/notification
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: fleet-infra

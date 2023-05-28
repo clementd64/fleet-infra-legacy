@@ -22,6 +22,8 @@ patches:
             use-proxy-protocol: "true"
 
           # Run on every load balancer target
+          # Slightly increase resources usage when no traffic but increase
+          # performances by avoiding cross-node traffic and double balancing
           kind: DaemonSet
           nodeSelector:
             hcloud.oci.sh/load-balancer-target: ""
