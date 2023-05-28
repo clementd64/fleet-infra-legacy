@@ -1,0 +1,14 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: fleet-infra-ingress-nginx
+  namespace: flux-system
+spec:
+  serviceAccountName: kustomize-controller
+  interval: 15m
+  path: ./clusters/maktha/manifests/ingress/nginx
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: fleet-infra

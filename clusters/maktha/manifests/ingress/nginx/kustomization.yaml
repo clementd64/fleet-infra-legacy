@@ -1,0 +1,46 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- ../../../../../manifests/ingress/nginx
+- network-policy.yaml
+
+patches:
+- patch: |-
+    apiVersion: helm.toolkit.fluxcd.io/v2beta1
+    kind: HelmRelease
+    metadata:
+      name: ingress-nginx
+      namespace: flux-system
+    spec:
+      values:
+        controller:
+          config:
+            enable-brotli: "true"
+            proxy-real-ip-cidr: "10.244.0.254/32"
+            use-gzip: "true"
+            use-proxy-protocol: "true"
+
+          # Run on every load balancer target
+          kind: DaemonSet
+          nodeSelector:
+            hcloud.oci.sh/load-balancer-target: ""
+
+          # Expose as NodePort
+          service:
+            type: NodePort
+            # Allow filtering source IP
+            externalTrafficPolicy: Local
+            ipFamilyPolicy: PreferDualStack
+            ipFamilies: [ IPv6, IPv4 ]
+            nodePorts:
+              http: 32080
+              https: 32443
+
+          # Security enforcement
+          image:
+            allowPrivilegeEscalation: false
+          podSecurityContext:
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
