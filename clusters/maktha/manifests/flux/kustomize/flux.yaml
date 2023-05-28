@@ -12,3 +12,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: fleet-infra
+  decryption:
+    provider: sops
+    secretRef:
+      name: fleet-infra-sops-age
