@@ -21,6 +21,7 @@ data "helm_template" "cilium" {
       # IPv4 routed using private network
       tunnel                = "disabled"
       ipv4NativeRoutingCIDR = var.pods_subnet_ipv4
+      MTU                   = 1450 # Hetzner private network use broken MTU
 
       # Set dual stack config
       ipv6                 = { enabled = true }
