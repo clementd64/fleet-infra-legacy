@@ -1,5 +1,5 @@
 data "hcloud_image" "talos_arm64" {
-  with_selector = "os=talos,version=v1.4.4"
+  with_selector     = "os=talos,version=v1.4.4"
   with_architecture = "arm"
 }
 
@@ -15,6 +15,7 @@ module "hcloud_talos" {
   api_floating_ipv6         = true
   api_floating_ip_api_token = var.api_floating_ip_api_token
 
+  firewall      = true
   load_balancer = true
 
   allow_scheduling_on_control_planes = true

@@ -136,6 +136,12 @@ variable "load_balancer_target_https_port" {
   default     = 32443
 }
 
+variable "firewall" {
+  description = "Enable basic firewalling"
+  type        = bool
+  default     = false
+}
+
 variable "cilium_version" {
   description = "Cilium version to install"
   type        = string
