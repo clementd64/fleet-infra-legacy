@@ -1,0 +1,30 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: cert-manager
+  namespace: flux-system
+spec:
+  interval: 6h
+  url: https://charts.jetstack.io
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: cert-manager
+  namespace: flux-system
+spec:
+  serviceAccountName: kustomize-controller
+  interval: 6h
+  chart:
+    spec:
+      chart: cert-manager
+      version: 'v1.12.1'
+      sourceRef:
+        kind: HelmRepository
+        name: cert-manager
+      interval: 6h
+  targetNamespace: cert-manager
+  values:
+    prometheus:
+      enabled: false
