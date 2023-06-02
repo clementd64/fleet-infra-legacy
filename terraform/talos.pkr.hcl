@@ -13,7 +13,7 @@ variable "talos_version" {
 
 variable "arch" {
   type    = string
-  default = "amd64"
+  default = "x86"
 }
 
 locals {
@@ -24,7 +24,7 @@ source "hcloud" "talos" {
   rescue       = "linux64"
   image        = "debian-11"
   location     = "fsn1"
-  server_type  = var.arch == "arm64" ? "cax11" : "cx11"
+  server_type  = var.arch == "arm" ? "cax11" : "cx11"
   ssh_username = "root"
 
   snapshot_name = "talos ${var.talos_version} ${var.arch}"

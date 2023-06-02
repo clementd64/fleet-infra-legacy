@@ -1,4 +1,4 @@
-data "hcloud_image" "talos_arm64" {
+data "hcloud_image" "talos_arm" {
   with_selector     = "os=talos,version=v1.4.5"
   with_architecture = "arm"
 }
@@ -9,8 +9,8 @@ module "hcloud_talos" {
   cluster_name       = "maktha"
   kubernetes_version = "v1.27.2"
 
-  datacenter     = "fsn1-dc14"
-  image_arm64_id = data.hcloud_image.talos_arm64.id
+  datacenter   = "fsn1-dc14"
+  image_arm_id = data.hcloud_image.talos_arm.id
 
   api_floating_ipv6         = true
   api_floating_ip_api_token = var.api_floating_ip_api_token

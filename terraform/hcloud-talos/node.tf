@@ -48,7 +48,7 @@ resource "hcloud_server" "node" {
   for_each = local.nodesets
 
   name               = "${var.cluster_name}-${each.key}"
-  image              = data.hcloud_server_type.instance_type[each.value.instance_type].architecture == "arm" ? var.image_arm64_id : var.image_amd64_id
+  image              = data.hcloud_server_type.instance_type[each.value.instance_type].architecture == "arm" ? var.image_arm_id : var.image_x86_id
   server_type        = each.value.instance_type
   datacenter         = var.datacenter
   placement_group_id = each.value.placement_group == null ? null : hcloud_placement_group.placement_group[each.value.placement_group].id

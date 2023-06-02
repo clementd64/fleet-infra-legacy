@@ -13,14 +13,14 @@ variable "datacenter" {
   type        = string
 }
 
-variable "image_amd64_id" {
-  description = "Snapshot ID of talos amd64 image"
+variable "image_x86_id" {
+  description = "Snapshot ID of talos x86 image"
   type        = number
   default     = null
 }
 
-variable "image_arm64_id" {
-  description = "Snapshot ID of talos arm64 image"
+variable "image_arm_id" {
+  description = "Snapshot ID of talos arm image"
   type        = number
   default     = null
 }
