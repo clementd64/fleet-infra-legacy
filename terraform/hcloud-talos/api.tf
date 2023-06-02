@@ -21,7 +21,8 @@ resource "hcloud_floating_ip" "api" {
 locals {
   # Talos is unable to set the VIP if its not ::0
   # Because the floating range is fully routed, no issue with the "Subnet-Router anycast" (RFC 4291 § 2.6.1)
-  api_floating_ipv6 = var.api_floating_ipv6 ? cidrhost(hcloud_floating_ip.api[0].ip_network, 0) : null
+  api_floating_ipv6        = var.api_floating_ipv6 ? cidrhost(hcloud_floating_ip.api[0].ip_network, 0) : null
+  api_floating_ipv6_subnet = var.api_floating_ipv6 ? hcloud_floating_ip.api[0].ip_network : null
 }
 
 resource "cloudflare_record" "api_ipv6_floating_ip" {

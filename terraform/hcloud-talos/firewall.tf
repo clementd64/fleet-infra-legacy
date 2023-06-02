@@ -40,12 +40,13 @@ resource "hcloud_firewall" "firewall" {
     ]
   }
 
+  # Add floating IPv6 because it may be used for egress, depending of source selection algorithm.
   rule {
     description = "Allow node to node IPv6"
     direction   = "in"
     protocol    = "tcp"
     port        = "any"
-    source_ips  = [for _, v in local.nodesets_ip : v.ipv6_subnet]
+    source_ips  = concat([local.api_floating_ipv6_subnet], [for _, v in local.nodesets_ip : v.ipv6_subnet])
   }
 
   rule {
@@ -53,7 +54,7 @@ resource "hcloud_firewall" "firewall" {
     direction   = "in"
     protocol    = "udp"
     port        = "any"
-    source_ips  = [for _, v in local.nodesets_ip : v.ipv6_subnet]
+    source_ips  = concat([local.api_floating_ipv6_subnet], [for _, v in local.nodesets_ip : v.ipv6_subnet])
   }
 
   rule {
