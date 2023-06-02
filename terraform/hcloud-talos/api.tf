@@ -35,6 +35,14 @@ resource "cloudflare_record" "api_ipv6_floating_ip" {
   proxied = false
 }
 
+resource "hcloud_rdns" "api_ipv6_floating_ip" {
+  count = var.api_floating_ipv6 ? 1 : 0
+
+  floating_ip_id = hcloud_floating_ip.api[0].id
+  ip_address     = local.api_floating_ipv6
+  dns_ptr        = "api.${var.cluster_name}.k8s.${local.domain_name}"
+}
+
 resource "cloudflare_record" "api_ipv6_nodes" {
   for_each = (
     var.api_floating_ipv6

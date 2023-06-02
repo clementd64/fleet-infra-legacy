@@ -85,3 +85,19 @@ resource "cloudflare_record" "lb_ipv4" {
   value   = hcloud_load_balancer.load_balancer[0].ipv4
   proxied = false
 }
+
+resource "hcloud_rdns" "lb_ipv6" {
+  count = var.load_balancer ? 1 : 0
+
+  load_balancer_id = hcloud_load_balancer.load_balancer[0].id
+  ip_address       = hcloud_load_balancer.load_balancer[0].ipv6
+  dns_ptr          = "lb.${var.cluster_name}.k8s.${local.domain_name}"
+}
+
+resource "hcloud_rdns" "lb_ipv4" {
+  count = var.load_balancer ? 1 : 0
+
+  load_balancer_id = hcloud_load_balancer.load_balancer[0].id
+  ip_address       = hcloud_load_balancer.load_balancer[0].ipv4
+  dns_ptr          = "lb.${var.cluster_name}.k8s.${local.domain_name}"
+}

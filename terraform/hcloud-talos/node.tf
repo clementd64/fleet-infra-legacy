@@ -93,3 +93,19 @@ resource "cloudflare_record" "node_ipv4" {
   value   = each.value.ipv4_address
   proxied = false
 }
+
+resource "hcloud_rdns" "node_ipv6" {
+  for_each = local.nodesets_ip
+
+  server_id  = hcloud_server.node[each.key].id
+  ip_address = each.value.ipv6_address
+  dns_ptr    = "${each.key}.nodes.${var.cluster_name}.k8s.${local.domain_name}"
+}
+
+resource "hcloud_rdns" "node_ipv4" {
+  for_each = local.nodesets_ip
+
+  server_id  = hcloud_server.node[each.key].id
+  ip_address = each.value.ipv4_address
+  dns_ptr    = "${each.key}.nodes.${var.cluster_name}.k8s.${local.domain_name}"
+}
