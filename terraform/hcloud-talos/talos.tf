@@ -150,12 +150,12 @@ resource "talos_machine_configuration_apply" "config_apply" {
 # Floating ip assigned after bootstrapping
 # Use the first controlplane for bootstrapping
 locals {
-  first_controlplane_ip = [for k, v in local.nodesets_ip : v.ipv6_address if v.controlplane][0]
+  controlplane_bootstrap_ip = [for k, v in local.nodesets_ip : v.ipv6_address if v.controlplane][var.talos_bootstrap_node_index]
 }
 resource "talos_machine_bootstrap" "bootstrap" {
   client_configuration = data.talos_client_configuration.talosconfig.client_configuration
-  endpoint             = local.first_controlplane_ip
-  node                 = local.first_controlplane_ip
+  endpoint             = local.controlplane_bootstrap_ip
+  node                 = local.controlplane_bootstrap_ip
 
   lifecycle {
     ignore_changes = [
@@ -199,8 +199,8 @@ resource "null_resource" "node_pod_cidr" {
 
 data "talos_cluster_kubeconfig" "kubeconfig" {
   client_configuration = data.talos_client_configuration.talosconfig.client_configuration
-  endpoint             = local.first_controlplane_ip
-  node                 = local.first_controlplane_ip
+  endpoint             = local.controlplane_bootstrap_ip
+  node                 = local.controlplane_bootstrap_ip
   wait                 = true # Wait API Server to be up
 
   depends_on = [

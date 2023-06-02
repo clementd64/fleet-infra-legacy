@@ -85,11 +85,11 @@ resource "cloudflare_record" "node_ipv6" {
 }
 
 resource "cloudflare_record" "node_ipv4" {
-  for_each = local.nodesets
+  for_each = local.nodesets_ip
 
   zone_id = data.cloudflare_zone.zone.id
   name    = "nodes.${var.cluster_name}.k8s"
   type    = "A"
-  value   = hcloud_primary_ip.ipv4[each.key].ip_address
+  value   = each.value.ipv4_address
   proxied = false
 }

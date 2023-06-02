@@ -41,7 +41,10 @@ locals {
   # Split it from nodesets because ipv6 creation require nodesets to be defined
   nodesets_ip = { for n in var.nodes : n.id => merge(n, {
     ipv6_address         = cidrhost(hcloud_primary_ip.ipv6[n.id].ip_network, 1)
+    ipv6_subnet          = hcloud_primary_ip.ipv6[n.id].ip_network
     ipv6_pod_cidr        = cidrsubnet(hcloud_primary_ip.ipv6[n.id].ip_network, 52, 1), # 116 - 64 = 52
+    ipv4_address         = hcloud_primary_ip.ipv4[n.id].ip_address
+    ipv4_subnet          = "${hcloud_primary_ip.ipv4[n.id].ip_address}/32"
     ipv4_private_address = cidrhost(local.nodes_private_ipv4_subnet, n.id)
     ipv4_pod_cidr        = cidrsubnet(var.pods_subnet_ipv4, 8, n.id)
   }) }

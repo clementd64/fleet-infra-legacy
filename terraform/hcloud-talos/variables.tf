@@ -171,3 +171,9 @@ variable "pod_security_namespace_exemptions" {
   type        = list(string)
   default     = []
 }
+
+variable "talos_bootstrap_node_index" {
+  description = "Change node used for bootstrapping and fetching kubeconfig. Useful if selected node is failed."
+  type        = number
+  default     = 1
+}

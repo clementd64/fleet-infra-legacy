@@ -1,5 +1,5 @@
 data "hcloud_image" "talos_arm64" {
-  with_selector     = "os=talos,version=v1.4.4"
+  with_selector     = "os=talos,version=v1.4.5"
   with_architecture = "arm"
 }
 

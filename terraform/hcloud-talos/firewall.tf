@@ -41,19 +41,35 @@ resource "hcloud_firewall" "firewall" {
   }
 
   rule {
-    description = "Allow node to node internal IPv6 traffic"
+    description = "Allow node to node IPv6"
     direction   = "in"
     protocol    = "tcp"
     port        = "any"
-    source_ips  = [for _, v in local.nodesets : hcloud_primary_ip.ipv6[v.id].ip_network]
+    source_ips  = [for _, v in local.nodesets_ip : v.ipv6_subnet]
   }
 
   rule {
-    description = "Allow node to node internal IPv6 traffic"
+    description = "Allow node to node IPv6"
     direction   = "in"
     protocol    = "udp"
     port        = "any"
-    source_ips  = [for _, v in local.nodesets : hcloud_primary_ip.ipv6[v.id].ip_network]
+    source_ips  = [for _, v in local.nodesets_ip : v.ipv6_subnet]
+  }
+
+  rule {
+    description = "Allow node to node IPv4"
+    direction   = "in"
+    protocol    = "tcp"
+    port        = "any"
+    source_ips  = [for _, v in local.nodesets_ip : v.ipv4_subnet]
+  }
+
+  rule {
+    description = "Allow node to node IPv4"
+    direction   = "in"
+    protocol    = "udp"
+    port        = "any"
+    source_ips  = [for _, v in local.nodesets_ip : v.ipv4_subnet]
   }
 }
 
