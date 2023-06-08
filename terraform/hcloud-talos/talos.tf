@@ -116,7 +116,8 @@ data "talos_machine_configuration" "node" {
       machine = {
         network = {
           interfaces = [{
-            interface = "eth0"
+            interface = "dum0"
+            dummy     = true
             vip = {
               ip = local.api_floating_ipv6
               hcloud = {
