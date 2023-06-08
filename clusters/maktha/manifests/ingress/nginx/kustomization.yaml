@@ -3,7 +3,7 @@ kind: Kustomization
 
 resources:
 - ../../../../../manifests/ingress/nginx
-- network-policies.yaml
+# - network-policies.yaml
 
 patches:
 - patch: |-
