@@ -33,3 +33,6 @@ spec:
       name: '*'
     - kind: Kustomization
       name: '*'
+  exclusionList:
+  # This notification is a bit spammy
+  - "^Dependencies do not meet ready condition.*"
