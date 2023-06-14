@@ -30,3 +30,17 @@ spec:
     provider: sops
     secretRef:
       name: fleet-infra-sops-age
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: fleet-infra-flux-receiver
+  namespace: flux-system
+spec:
+  serviceAccountName: kustomize-controller
+  interval: 15m
+  path: ./clusters/maktha/manifests/flux/receiver
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: fleet-infra

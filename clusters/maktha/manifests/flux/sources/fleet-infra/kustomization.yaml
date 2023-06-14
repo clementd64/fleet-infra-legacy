@@ -3,3 +3,5 @@ kind: Kustomization
 resources:
 - sshkey.secret.yaml
 - repository.yaml
+- webhook-token.secret.yaml
+- receiver.yaml
