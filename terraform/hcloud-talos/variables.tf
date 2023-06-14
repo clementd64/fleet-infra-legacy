@@ -177,3 +177,9 @@ variable "talos_bootstrap_node_index" {
   type        = number
   default     = 1
 }
+
+variable "extra_subdomains" {
+  description = "Extra subdomain to be CNAMEd to the load balancer (or nodes is disabled). E.g. for Flux receiver webhook"
+  type        = list(string)
+  default     = []
+}

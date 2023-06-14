@@ -20,6 +20,10 @@ module "hcloud_talos" {
 
   allow_scheduling_on_control_planes = true
 
+  extra_subdomains = [
+    "flux.maktha.k8s"
+  ]
+
   nodes = [
     {
       id                   = 35

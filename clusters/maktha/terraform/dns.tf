@@ -1,12 +1,15 @@
-data "cloudflare_zone" "zone" {
+data "cloudflare_zone" "segfault-ovh" {
   name = "segfault.ovh"
 }
 
-resource "cloudflare_record" "segfault-ovh" {
-  zone_id = data.cloudflare_zone.zone.id
-  name    = "@"
+resource "cloudflare_record" "lb_segfault-ovh" {
+  for_each = toset([
+    "outline",
+  ])
+
+  zone_id = data.cloudflare_zone.segfault-ovh.id
+  name    = each.value
   type    = "CNAME"
-  # TODO: pass as module output
-  value   = "lb.maktha.k8s.oci.sh"
+  value   = module.hcloud_talos.domain.load_balancer
   proxied = false
 }

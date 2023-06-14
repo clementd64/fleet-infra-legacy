@@ -101,3 +101,13 @@ resource "hcloud_rdns" "lb_ipv4" {
   ip_address       = hcloud_load_balancer.load_balancer[0].ipv4
   dns_ptr          = "lb.${var.cluster_name}.k8s.${local.domain_name}"
 }
+
+resource "cloudflare_record" "extra_subdomains" {
+  for_each = toset(var.extra_subdomains)
+
+  zone_id = data.cloudflare_zone.zone.id
+  name    = each.value
+  type    = "CNAME"
+  value   = var.load_balancer ? "lb.${var.cluster_name}.k8s.${local.domain_name}." : "nodes.${var.cluster_name}.k8s.${local.domain_name}."
+  proxied = false
+}

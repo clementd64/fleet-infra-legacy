@@ -13,3 +13,17 @@ output "kubeconfig" {
     host               = data.talos_cluster_kubeconfig.kubeconfig.kubernetes_client_configuration.host
   }
 }
+
+output "domain" {
+  value = {
+    load_balancer = var.load_balancer ? "lb.${var.cluster_name}.k8s.${local.domain_name}" : null
+    nodes         = "nodes.${var.cluster_name}.k8s.${local.domain_name}"
+    api           = "api.${var.cluster_name}.k8s.${local.domain_name}"
+  }
+}
+
+output "nodes" {
+  value = { for n in local.nodesets_ip : n.id => merge(n, {
+    server_id = hcloud_server.node[n.id].id
+  }) }
+}
