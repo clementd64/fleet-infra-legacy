@@ -2,7 +2,7 @@ terraform {
   required_providers {
     cloudflare = {
       source  = "cloudflare/cloudflare"
-      version = "~> 4.6.0"
+      version = "~> 4.7.0"
     }
     github = {
       source  = "integrations/github"
@@ -10,7 +10,7 @@ terraform {
     }
     hcloud = {
       source  = "hetznercloud/hcloud"
-      version = "~> 1.38.2"
+      version = "~> 1.40.0"
     }
   }
 }
