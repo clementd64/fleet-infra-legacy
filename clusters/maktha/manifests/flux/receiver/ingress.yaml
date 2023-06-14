@@ -6,6 +6,7 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: acme-http01-letsencrypt-prod
 spec:
+  ingressClassName: nginx
   rules:
   - host: flux.maktha.k8s.oci.sh
     http:
